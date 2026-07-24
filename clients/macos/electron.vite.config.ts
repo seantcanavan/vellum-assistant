@@ -31,6 +31,7 @@ const DEPS_TO_INLINE = [
   "@vellumai/ipc-contract",
   "@vellumai/local-mode",
   "@vellumai/environments",
+  "@vellumai/desktop-shell",
 ];
 
 // Resolved at config-evaluation time and inlined into the main bundle via
@@ -96,7 +97,11 @@ export default defineConfig({
     build: {
       outDir: "out/main",
       lib: {
-        entry: "src/main/index.ts",
+        // The main process is the shared cross-platform desktop runtime.
+        entry: path.resolve(
+          __dirname,
+          "../../packages/desktop-shell/src/main/index.ts",
+        ),
       },
       rollupOptions: {
         external: ["electron"],
@@ -108,7 +113,11 @@ export default defineConfig({
     build: {
       outDir: "out/preload",
       lib: {
-        entry: "src/preload/index.ts",
+        // The preload (VellumBridge) is shared across desktop clients.
+        entry: path.resolve(
+          __dirname,
+          "../../packages/desktop-shell/src/preload/index.ts",
+        ),
       },
       rollupOptions: {
         external: ["electron"],
